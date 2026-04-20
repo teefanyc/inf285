@@ -1,0 +1,164 @@
+/* Set up flexbox, load a default font */
+:root {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    font-family: 'New-Kansas', sans-serif;
+    min-height: 100vh;
+    padding-top: 3%;
+    /*Part 2: Edit colors and styles to customize your TODO list.
+    You must also update add a background, such as a color, gradient, or image.
+    Any further styling is up to you!
+    */
+    --primary-color: #5a6504;
+    --secondary-color: #ff8033;
+    --primary-background: #ff8033;
+    --secondary-background: #ffe2e3;
+    background-image: url("todo-bg-3840x2160.jpg");
+}
+
+#header {
+    font-size: 3rem;
+    color: var(--primary-color);
+}
+
+form {
+    display: flex;
+}
+
+form input {
+    font-size: 20px;
+    padding: 0.5em;
+    border: 0.5px solid #F6B6A7;
+    background-color: #ffffff;
+    width: 100%;
+}
+
+form input:hover {
+    cursor: text;
+}
+
+form button {
+    padding: 0.5em;;
+    font-size: 20px;
+    min-width: 100px;
+    color: white;
+    background-color: var(--primary-color);
+}
+
+/* Part 2: Add animations for completing and removing events.
+Any further animations are up to you! */
+
+button {
+    border: none;
+    color: var(--primary-color);
+    background-color: var(--primary-background);
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+h1 {
+    text-shadow: 5px 5px rgb(178, 148, 149, 0.75);
+    text-align: center;
+}
+
+div.todo-div.completed {
+    animation: nudge .5s;
+}
+
+.todo-container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary-background);
+    border: 2px solid var(--secondary-color);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    box-shadow: 8px 8px rgb(178, 148, 149, 0.5);
+}
+
+.todo-header {
+    display: flex;
+    border-radius: 20px;
+    padding: 0.5em 1em;
+    font-size: 24px;
+    color: #A66D45;
+}
+
+.todo-list {
+    display: flex;
+    flex-direction: column;
+    /* Removes the bullet points */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.todo-div {
+    display: flex;
+    padding: 0.25em 0.5em;
+    border: 0.5px solid #F6B6A7;
+    color: var(--primary-color);
+    background-color: var(--secondary-background);
+}
+
+.todo-div li{
+    padding: 7px;
+    font-size: 20px;
+    flex: 1;
+}
+
+.check-btn {
+    font-size: 17px;
+    cursor: pointer;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    margin: 0 5px;
+}
+
+.delete-btn {
+    font-size: 17px;
+    cursor: pointer;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    margin: 0 5px;
+}
+
+.fa-trash, .fa-check { 
+    pointer-events: none;
+}
+
+.completed {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.remove {
+    opacity: 0;
+    animation: explode 1s;
+}
+
+@keyframes nudge {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(25px);
+        opacity: 0.5;
+    }
+}
+
+@keyframes explode {
+    0% {
+        transform: scale(1.0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.25);
+        opacity: 0;
+    }
+}

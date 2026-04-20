@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Basic TODO list for IN4MATX 285">
+
+    <!-- Google Font: Roboto -->
+   <link rel="stylesheet" href="https://use.typekit.net/rxb5yif.css">
+
+    <!-- font awesome (https://fontawesome.com) for basic icons; source: https://cdnjs.com/libraries/font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="checkmark" href="favicon.ico">
+    <title>TODO list</title>
+
+</head>
+
+<body>
+    <div id="header">
+        <h1>You got this!</h1>
+    </div>
+
+<div class="todo-container">
+    <div class="todo-header">
+        <b>TO DO</b>
+    </div>
+    <form>
+        <input type="text" placeholder="What's your task?">
+        <button class="todo-btn" type="submit">Add it!</button>
+    </form>
+
+    <div>
+         <ul class="todo-list">
+            <!--Part 1: add items for "Create Checklist", "Style Webpage", and "Add Animations"-->
+            <div class="todo-div completed">
+                <button class="check-btn"><i class="fas fa-check"></i></button>
+                <li>Create Checklist</li>
+                <button class="delete-btn"><i class="fas fa-trash"></i></button>
+            </div>
+            <div class="todo-div">
+                <button class="check-btn"><i class="fas fa-check"></i></button>
+                <li>Style Webpage</li>
+                <button class="delete-btn"><i class="fas fa-trash"></i></button>
+            </div>
+            <div class="todo-div">
+                <button class="check-btn"><i class="fas fa-check"></i></button>
+                <li>Add Animations</li>
+                <button class="delete-btn"><i class="fas fa-trash"></i></button>
+            </div>
+        </ul>
+    </div>
+</div>
+    <script src="script.js" type="text/javascript"> </script>
+</body>
+</html>
