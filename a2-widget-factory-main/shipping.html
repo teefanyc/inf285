@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!--Load the spectrum library-->
+    <script src="https://jspm.dev/@spectrum-web-components/bundle/elements.js" type="module" async></script>
+    <!--Load the data files for widgets and shipping, then the script file.-->
+    <script src="widgets_data.js"></script>
+    <script src="shipping_data.js"></script>
+    <script src="script.js"></script>
+    <!--Load the external stylesheet and favicon.-->
+    <link rel="stylesheet" href="style.css">
+    <link rel="store icon" href="favicon.ico">
+    <title>My Widget Store: Shipping</title>
+  </head>
+  <body onload="loadShippingPage()">
+    <sp-theme scale="large" color="light">
+      <!--TODO: your code here!-->
+      <!--TODO: you may choose a different way of navigating to the next page. Specifying the onclick to call "gotoSummaryPage" should store any inputted data.-->
+      <input type="button" value="Place Order" onclick="gotoSummaryPage()"></input>
+    </sp-theme>
+  </body>
+</html>
