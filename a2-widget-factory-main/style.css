@@ -9,19 +9,23 @@
 body {
   margin: 0;
   padding: 0;
+  color: var(--primary-color);
 }
 
 .topbar {
 	display: flex;
 	padding: 20px 40px;
-	justify-content: space-between;
-	align-items: center;
-	flex: 1 0 0;
-	background: var(--secondary-background);
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+	background: var(--secondary-background);
+	align-items: center;
+}
+
+.logo {
+	justify-content: space-between;
+	flex: 1 0 0;
 	font-size: var(--spectrum-heading-size-l);
 	font-weight: var(--spectrum-global-font-weight-extra-bold);
-	color: var(--primary-color);
+	cursor: pointer;
 }
 
 .main {
@@ -40,6 +44,11 @@ body {
 	justify-content: center;
 }
 
+.container {
+	max-width: 800px;
+	width: 100%;
+}
+
 .item-card {
 	display: flex;
 	flex-direction: column;
@@ -56,7 +65,6 @@ body {
 	background: var(--secondary-background);
 	font-size: var(--spectrum-heading-size-m);
 	font-weight: var(--spectrum-global-font-weight-bold);
-	color: var(--primary-color);
 }
 
 .rating {
@@ -117,7 +125,7 @@ sp-popover {
 }
 
 
-sp-button {
+.main sp-action-button {
 	display: flex;
 	width: 100%;
 	max-width: 1200px;
@@ -127,3 +135,101 @@ sp-button {
 	padding: 0 40px;
 }
 
+.shipping {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: 800px;
+	gap: 24px;
+	color: var(--primary-color);
+}
+
+sp-textfield {
+	display: flex;
+	width: 100%;
+}
+
+sp-picker {
+	display: flex;
+	width: 100%;
+}
+
+sp-field-label {
+	color: var(--secondary-color);
+}
+
+.summary {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 20px 0;
+}
+
+.summary-header {
+	width: 100%;
+}
+
+.summary-item {
+	width: 100%;
+	display: flex;
+}
+
+.item-details {
+	display: flex;
+	flex: 1;
+	gap: 8px;
+	height: 72px;
+	align-items: center;
+}
+
+.item-quantity {
+	width: 36px;
+}
+
+.item-specs {
+	display: flex;
+	flex-direction: column;
+	width: 100$;
+	align-items: stretch;
+	justify-content: center;
+}
+
+.item-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.item-color {
+  font-size: 16px;
+  font-weight: 400;
+  smargin: 0;
+}
+
+.item-price {
+	display: flex;
+}
+
+p {
+	margin: 0px;
+}
+
+h2 {
+	margin: 0;
+}
+
+.summary-total {
+	align-items: center;
+	display: flex;
+	padding: 20px 0;
+}
+
+.total-quantity {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+	
+.shipping-address {
+	padding: 20px 0;
+}

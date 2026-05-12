@@ -13,8 +13,132 @@
     <title>My Widget Store: Summary</title>
   </head>
   <body onload="loadSummaryPage()">
-    <sp-theme scale="large" color="light">
+    <sp-theme scale="medium" color="light">
       <!--TODO: your code here!-->
+
+        <div class="topbar">
+          <div class="logo" onclick="gotoOrderPage()">My Widget Store</div>
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M15.5 8H2.5C2.22386 8 2 8.22386 2 8.5V9.5C2 9.77614 2.22386 10 2.5 10H15.5C15.7761 10 16 9.77614 16 9.5V8.5C16 8.22386 15.7761 8 15.5 8Z" fill="#4046CA"/>
+            <path d="M15.5 3H2.5C2.22386 3 2 3.22386 2 3.5V4.5C2 4.77614 2.22386 5 2.5 5H15.5C15.7761 5 16 4.77614 16 4.5V3.5C16 3.22386 15.7761 3 15.5 3Z" fill="#4046CA"/>
+            <path d="M15.5 13H2.5C2.22386 13 2 13.2239 2 13.5V14.5C2 14.7761 2.22386 15 2.5 15H15.5C15.7761 15 16 14.7761 16 14.5V13.5C16 13.2239 15.7761 13 15.5 13Z" fill="#4046CA"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="main">
+        <div class="container">
+
+          <div class="summary-header">
+            <h1>Order in!</h1>
+            Thanks for shopping at My Widget Store. Your business is greatly appreciated!
+          </div>
+
+          <div class="summary">
+            <h2>Summary</h2>
+
+            <!--line item start-->
+            <div class="summary-item">
+              <div class="item-details">
+                <div class="item-quantity">
+                  <h2><span id="toyboat_quantity">0</span>x</h2>
+                </div>
+                <div class="item-specs">
+                  <p class="item-name">Toy Boat</p>
+                  <p class="item-color">Color: #<span id="toyboat_color"></span></p>
+                </div>
+              </div>
+              <div class="item-price" id="toyboat_subtotal">0.00</div>
+            </div>
+          <!--line item end-->
+
+          <sp-divider size="s"></sp-divider>
+
+          <!--line item start-->
+            <div class="summary-item">
+              <div class="item-details">
+                <div class="item-quantity">
+                  <h2><span id="paperplane_quantity">0</span>x</h2>
+                </div>
+                <div class="item-specs">
+                  <p class="item-name">Paper Plane</p>
+                  <p class="item-color">Color: #<span id="paperplane_color"></span></p>
+                </div>
+              </div>
+              <div class="item-price" id="paperplane_subtotal">0.00</div>
+            </div>
+          <!--line item end-->
+
+          <sp-divider size="s"></sp-divider>
+
+          <!--line item start-->
+            <div class="summary-item">
+              <div class="item-details">
+                <div class="item-quantity">
+                  <h2><span id="stuffedanimal_quantity">0</span>x</h2>
+                </div>
+                <div class="item-specs">
+                  <p class="item-name">Stuffed Animal</p>
+                  <p class="item-color">Color: #<span id="stuffedanimal_color"></span></p>
+                </div>
+              </div>
+              <div class="item-price" id="stuffedanimal_subtotal">0.00</div>
+            </div>
+          <!--line item end-->
+
+          <sp-divider size="s"></sp-divider>
+
+          <!--line item start-->
+            <div class="summary-item">
+              <div class="item-details">
+                <div class="item-quantity">
+                  <h2><span id="traincar_quantity">0</span>x</h2>
+                </div>
+                <div class="item-specs">
+                  <p class="item-name">Train Car</p>
+                  <p class="item-color">Color: #<span id="traincar_color"></span></p>
+                </div>
+              </div>
+              <div class="item-price" id="traincar_subtotal">0.00</div>
+            </div>
+          <!--line item end-->
+
+          <sp-divider size="s"></sp-divider>
+
+          <!--line item start-->
+            <div class="summary-item">
+              <div class="item-details">
+                <p class="item-name">Shipping (<span id="shipping_speed"></span>)</p>
+              </div>
+              <div class="item-price" id="shipping_subtotal">0.00</div>
+            </div>
+          <!--line item end-->
+
+          <sp-divider size="l"></sp-divider>
+
+          <!--total start-->
+            <div class="summary-total">
+              <div class="total-quantity">
+                <sp-field-label>Total</sp-field-label>
+                <h2><span id="total_quantity">0</span> Widgets</h2>
+              </div>
+              <div class="item-price" id="total_cost">0.00</div>
+            </div>
+          <!--total item end-->
+
+          <sp-divider size="m"></sp-divider>
+
+          </div>
+
+          <div class="shipping-address">
+            <h3><b>Shipping to:</b> </br> <span id="address"></span></br><span id="city"></span>, <span id="state"></span> <span id="zip"></span>.</h3>
+            <h3>Your order will arrive on: <b><span id="arrival_date"> TBD</span></b>.</h3>
+          </div>
+
+        </div>
+      </div>
+
     </sp-theme>
   </body>
 </html>

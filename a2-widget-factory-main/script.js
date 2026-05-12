@@ -132,21 +132,6 @@ function gotoSummaryPage() {
     navigateTo('summary.html', 2000);
 }
 
-
-//min zero
-customElements.whenDefined('sp-number-field').then(() => {
-  const numberFields = document.querySelectorAll('sp-number-field');
-  
-  numberFields.forEach((numberField) => {
-    numberField.min = 0;
-    numberField.max = 10;
-
-    const clamp = () => {
-      numberField.value = Math.min(10, Math.max(0, numberField.value));
-    };
-
-    numberField.addEventListener('input', clamp);
-    numberField.addEventListener('change', clamp);
-  });
-});
-
+function gotoOrderPage() {
+  navigateTo('index.html');
+}
