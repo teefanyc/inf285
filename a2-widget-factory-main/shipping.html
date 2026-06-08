@@ -18,13 +18,6 @@
 
       <div class="topbar">
           <div class="logo" onclick="gotoOrderPage()">My Widget Store</div>
-        <div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M15.5 8H2.5C2.22386 8 2 8.22386 2 8.5V9.5C2 9.77614 2.22386 10 2.5 10H15.5C15.7761 10 16 9.77614 16 9.5V8.5C16 8.22386 15.7761 8 15.5 8Z" fill="#4046CA"/>
-            <path d="M15.5 3H2.5C2.22386 3 2 3.22386 2 3.5V4.5C2 4.77614 2.22386 5 2.5 5H15.5C15.7761 5 16 4.77614 16 4.5V3.5C16 3.22386 15.7761 3 15.5 3Z" fill="#4046CA"/>
-            <path d="M15.5 13H2.5C2.22386 13 2 13.2239 2 13.5V14.5C2 14.7761 2.22386 15 2.5 15H15.5C15.7761 15 16 14.7761 16 14.5V13.5C16 13.2239 15.7761 13 15.5 13Z" fill="#4046CA"/>
-          </svg>
-        </div>
       </div>
 
       <!--content-->
@@ -38,26 +31,34 @@
           <div class="form">
           <h2>Address</h2>
 
+          <div class="form-field">
             <sp-field-label required>Address</sp-field-label>
             <sp-textfield placeholder="Address" id="address"></sp-textfield>
-
+          </div>
+          <div class="form-field">
             <sp-field-label required>City</sp-field-label>
             <sp-textfield placeholder="City" id="city"></sp-textfield>
-
+          </div> 
+          <div class="form-field">
             <sp-field-label required>State</sp-field-label>
             <sp-textfield placeholder="State"  id="state"></sp-textfield>
-
+          </div>
+          <div class="form-field">
             <sp-field-label required>Zip Code</sp-field-label>
             <sp-textfield placeholder="Zip Code"  id="zip"></sp-textfield>
-              <sp-help-text slot="help-text">* Required field.</sp-help-text>
+          </div>
+          <div class="form-field">
+            <sp-help-text slot="help-text">* Required field.</sp-help-text>
+          </div>
+
           </div>
 
           <div class="form">
           <h2>Shipping Speed</h2>
           <sp-picker label="Select Shipping Speed:" id="shipping_speed">
-              <sp-menu-item value="Express">Express Shipping (1 day, $15.99)</sp-menu-item>
-              <sp-menu-item value="Standard">Standard Shipping (5 days, $3.99)</sp-menu-item>
-              <sp-menu-item value="Slow">Slow Shipping (10 days, $0.99)</sp-menu-item>
+              <sp-menu-item value="slow">Slow Shipping (10 days, $0.99)</sp-menu-item>
+              <sp-menu-item value="standard">Standard Shipping (5 days, $3.99)</sp-menu-item>
+              <sp-menu-item value="express">Express Shipping (1 day, $15.99)</sp-menu-item>
           </sp-picker>
           </div>
 

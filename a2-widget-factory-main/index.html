@@ -7,6 +7,8 @@
     <script src="widgets_data.js"></script>
     <script src="shipping_data.js"></script>
     <script src="script.js"></script>
+    <script type="module" src="https://jspm.dev/@spectrum-web-components/icons-workflow/icons/sp-icon-shopping-cart.js"></script>
+    <script type="module" src="https://jspm.dev/@spectrum-web-components/icons-workflow/icons/sp-icon-money.js"></script>
     <!--Load the external stylesheet and favicon.-->
     <link rel="stylesheet" href="style.css">
     <link rel="store icon" href="favicon.ico">
@@ -19,14 +21,30 @@
       <!--topbar-->
       <div class="topbar">
         <div class="logo" onclick="gotoOrderPage()">My Widget Store</div>
-        <div>
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <path d="M15.5 8H2.5C2.22386 8 2 8.22386 2 8.5V9.5C2 9.77614 2.22386 10 2.5 10H15.5C15.7761 10 16 9.77614 16 9.5V8.5C16 8.22386 15.7761 8 15.5 8Z" fill="#4046CA"/>
-          <path d="M15.5 3H2.5C2.22386 3 2 3.22386 2 3.5V4.5C2 4.77614 2.22386 5 2.5 5H15.5C15.7761 5 16 4.77614 16 4.5V3.5C16 3.22386 15.7761 3 15.5 3Z" fill="#4046CA"/>
-          <path d="M15.5 13H2.5C2.22386 13 2 13.2239 2 13.5V14.5C2 14.7761 2.22386 15 2.5 15H15.5C15.7761 15 16 14.7761 16 14.5V13.5C16 13.2239 15.7761 13 15.5 13Z" fill="#4046CA"/>
-          </svg>
-        </div>
       </div>
+
+      <!--bottom bar-->
+        <div class="bottom-bar">
+          <h2><span id="total_quantity">0 Widgets</span></h2>
+          <div class="button-container">
+            <overlay-trigger type="modal" triggered-by="click">
+              <sp-action-button slot="trigger" selected onclick="populateTray()">
+                <sp-icon-shopping-cart slot="icon"></sp-icon-shopping-cart>
+                View cart
+              </sp-action-button>
+              <sp-tray slot="click-content">
+                <sp-dialog no-divider dismissable>
+                  <h2 slot="heading">Cart</h2>
+                  <div class="cart-tray-content"></div>
+                </sp-dialog>
+              </sp-tray>
+            </overlay-trigger>
+            <sp-action-button selected onclick="gotoShippingPage()">
+              <sp-icon-money slot="icon"></sp-icon-money>
+              Checkout
+            </sp-action-button>
+          </div>
+        </div>
 
       <!--content-->
         <div class="main">
@@ -50,7 +68,7 @@
 
                   <div class="quantity-picker">
                     <sp-field-label for="with-field-label">How Many?</sp-field-label>
-                    <sp-number-field value="0" oninput="if(this.value < 0) this.value = 0;" max="10" id="toyboat_quantity"></sp-number-field>
+                    <sp-number-field value="0" oninput="if(this.value < 0) this.value = 0; saveWidgetOrder(); saveWidgetOrder();" max="10" id="toyboat_quantity"></sp-number-field>
                       <sp-help-text slot="help-text">*Max. quantity: 10</sp-help-text>
                   </div>
 
@@ -81,7 +99,7 @@
 
                   <div class="quantity-picker">
                     <sp-field-label for="with-field-label">How Many?</sp-field-label>
-                    <sp-number-field value="0" oninput="if(this.value < 0) this.value = 0;" max="10" id="paperplane_quantity"></sp-number-field>
+                    <sp-number-field value="0" oninput="if(this.value < 0) this.value = 0; saveWidgetOrder();" max="10" id="paperplane_quantity"></sp-number-field>
                       <sp-help-text slot="help-text">*Max. quantity: 10</sp-help-text>
                   </div>
 
@@ -112,7 +130,7 @@
 
                   <div class="quantity-picker">
                     <sp-field-label for="with-field-label">How Many?</sp-field-label>
-                    <sp-number-field value="0" oninput="if(this.value < 0) this.value = 0;" max="10" id="stuffedanimal_quantity"></sp-number-field>
+                    <sp-number-field value="0" oninput="if(this.value < 0) this.value = 0; saveWidgetOrder();" max="10" id="stuffedanimal_quantity"></sp-number-field>
                       <sp-help-text slot="help-text">*Max. quantity: 10</sp-help-text>
                   </div>
 
@@ -143,7 +161,7 @@
 
                   <div class="quantity-picker">
                     <sp-field-label for="with-field-label">How Many?</sp-field-label>
-                    <sp-number-field value="0" oninput="if(this.value < 0) this.value = 0;" max="10" id="traincar_quantity"></sp-number-field>
+                    <sp-number-field value="0" oninput="if(this.value < 0) this.value = 0; saveWidgetOrder();" max="10" id="traincar_quantity"></sp-number-field>
                       <sp-help-text slot="help-text">*Max. quantity: 10</sp-help-text>
                   </div>
 
@@ -157,13 +175,16 @@
             </div>
             <!--item card end -->
 
+            <!--checkout btn
             <sp-action-button emphasized selected onclick="gotoShippingPage()">Check Out</sp-action-button>
+            -->
 
           </div>
         </div>
 
-      <p class="attribution">"<a rel="noopener noreferrer" href="https://www.flickr.com/photos/51638848@N00/3694330089">Toy boat</a>" by <a rel="noopener noreferrer" href="https://www.flickr.com/photos/51638848@N00">Jon Olav</a>, "<a rel="noopener noreferrer" href="https://www.flickr.com/photos/54133975@N08/20095707950">Cruelty to st￭ animals? #dogtoy #hungouttodry</a>" by <a rel="noopener noreferrer" href="https://www.flickr.com/photos/54133975@N08">Fresh On The Net</a>, "<a rel="noopener noreferrer" href="https://www.flickr.com/photos/99424477@N04/10562534896">Wooden toy train</a>" by <a rel="noopener noreferrer" href="https://www.flickr.com/photos/99424477@N04">prague.czech.photo</a>, and "<a rel="noopener noreferrer" href="https://www.flickr.com/photos/25368895@N00/3129971362">JAL Paper Plane</a>" by <a rel="noopener noreferrer" href="https://www.flickr.com/photos/25368895@N00">ayustety</a> are licensed under <a rel="noopener noreferrer" href="https://creativecommons.org/licenses/by/2.0/?ref=openverse">CC BY 2.0 <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style="height: 1em; margin-right: 0.125em; display: inline;" /><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style="height: 1em; margin-right: 0.125em; display: inline;" /></a>.</p>
-      <p class="attribution">"<a rel="noopener noreferrer" href="https://creativecommons.org/licenses/by/4.0/">1fec.svg</a>" by <a rel="noopener noreferrer" href="https://github.com/twitter/twemoji">Twitter Twemoji</a> is licensed under <a rel="noopener noreferrer" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style="height: 1em; margin-right: 0.125em; display: inline;" /><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style="height: 1em; margin-right: 0.125em; display: inline;" /></a>.</p>
+        <div class="attribution-container">
+          <p class="attribution">"<a rel="noopener noreferrer" href="https://www.flickr.com/photos/51638848@N00/3694330089">Toy boat</a>" by <a rel="noopener noreferrer" href="https://www.flickr.com/photos/51638848@N00">Jon Olav</a>  |  "<a rel="noopener noreferrer" href="https://www.flickr.com/photos/54133975@N08/20095707950">Cruelty to st￭ animals? #dogtoy #hungouttodry</a>" by <a rel="noopener noreferrer" href="https://www.flickr.com/photos/54133975@N08">Fresh On The Net</a>  |  "<a rel="noopener noreferrer" href="https://www.flickr.com/photos/99424477@N04/10562534896">Wooden toy train</a>" by <a rel="noopener noreferrer" href="https://www.flickr.com/photos/99424477@N04">prague.czech.photo</a>  |  "<a rel="noopener noreferrer" href="https://www.flickr.com/photos/25368895@N00/3129971362">JAL Paper Plane</a>" by <a rel="noopener noreferrer" href="https://www.flickr.com/photos/25368895@N00">ayustety</a> are licensed under <a rel="noopener noreferrer" href="https://creativecommons.org/licenses/by/2.0/?ref=openverse">CC BY 2.0 <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style="height: 1em; margin-right: 0.125em; display: inline;" /><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style="height: 1em; margin-right: 0.125em; display: inline;" /></a>.  |  "<a rel="noopener noreferrer" href="https://creativecommons.org/licenses/by/4.0/">1fec.svg</a>" by <a rel="noopener noreferrer" href="https://github.com/twitter/twemoji">Twitter Twemoji</a> is licensed under <a rel="noopener noreferrer" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" style="height: 1em; margin-right: 0.125em; display: inline;" /><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" style="height: 1em; margin-right: 0.125em; display: inline;" /></a>.</p>
+        </div>
       <!--TODO: you may choose a different way of navigating to the next page. Specifying the onclick to call "gotoShippingPage" should store any inputted data.-->
     </sp-theme>
   </body>

@@ -1,6 +1,51 @@
 //IDs for all the address fields
 let address_details = ['address', 'city', 'state', 'zip'];
 
+//bottombar hide and reveal
+function updateBottomBar() {
+  const bottomBar = document.querySelector('.bottom-bar');
+  const totalQuantity = Object.keys(widgets).reduce((sum, widget) => {
+    return sum + Number(sessionStorage.getItem(widgets[widget].quantity_id) || 0);
+  }, 0);
+
+  displayValueInElement('total_quantity', totalQuantity + ' Widgets');
+
+  if (totalQuantity > 0) {
+    bottomBar.classList.add('visible');
+  } else {
+    bottomBar.classList.remove('visible');
+  }
+}
+
+//populate cart tray
+function populateTray() {
+  const trayContent = document.querySelector('.cart-tray-content');
+  trayContent.innerHTML = '';
+
+  Object.keys(widgets).forEach((widget) => {
+    const quantity = Number(sessionStorage.getItem(widgets[widget].quantity_id) || 0);
+
+    if (quantity > 0) {
+      const color = sessionStorage.getItem(widgets[widget].color_id) || '';
+      const subtotal = (quantity * widgets[widget].price).toFixed(2);
+
+      const item = document.createElement('div');
+      item.classList.add('summary-item');
+      item.innerHTML = `
+        <div class="item-details">
+          <div class="item-quantity"><h2>${quantity}x</h2></div>
+          <div class="item-specs">
+            <p class="item-name">${widgets[widget].name}</p>
+            <p class="item-color">Color: #${color}</p>
+          </div>
+        </div>
+        <div class="item-price">$${subtotal}</div>
+      `;
+      trayContent.appendChild(item);
+    }
+  });
+}
+
 function saveWidgetOrder() {
     //Loop over all of the widgets
     Object.keys(widgets).forEach((widget) => {
@@ -23,7 +68,12 @@ function saveWidgetOrder() {
             }
         }
     });
+    updateBottomBar();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateBottomBar();
+});
 
 function saveShippingOptions() {
     // Depending on the type of input used, shipping speed may have a "value" or a "selected" field to indicate which speed to use

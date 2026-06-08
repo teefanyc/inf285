@@ -69,26 +69,37 @@ async function updateSearchResults() {
         //For case-insensitive search, consider using toLowerCase to convert both the pokemon name and search box text.
         //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toLowerCase
         //If a pokemon's name is not included in the text entered, hide the pokemon.
-
+        if(p.getName().toLowerCase().includes(search.toLowerCase())) {
+            showPokemon(p);
+        } else {
+            hidePokemon(p);
+        }
         //TODO: Use an if statement(s) to check if the checkboxes for the pokemon's type(s) are checked.
         //If a pokemon has two types, and either is unchecked, hide the pokemon.
-
+        if(!document.getElementById(p.getType1() + 'Checkbox').checked) {
+            hidePokemon(p);
+        } else if(p.getType2() && !document.getElementById(p.getType2() + 'Checkbox').checked) {
+            hidePokemon(p);
+        }
         //TODO: If the pokemon matches the search text and types checked, show the pokemon.
         //Also, update the total number of searched for pokemon.
-        
+        if(p.getName().toLowerCase().includes(search.toLowerCase()) && document.getElementById(p.getType1() + 'Checkbox').checked && (!p.getType2() || document.getElementById(p.getType2() + 'Checkbox').checked)) {
+            showPokemon(p);
+            searchedForPokemon++;
+            document.getElementById('number_pokemon').textContent = searchedForPokemon;
+        }
     }
 }
-
 //Part 3: A helper function for showing a particular pokemon.
 function showPokemon(pokemon) {
     let pokemonDOMId = pokemon.getId();
     //TODO: Find the pokemon in the DOM. Show it by removing the "hide" CSS property, if it exists.
-
-}
+        document.getElementById(pokemonDOMId).classList.remove('hide');
+    }
 
 //Part 3: A helper function for hiding a particular pokemon.
 function hidePokemon(pokemon) {
     let pokemonDOMId = pokemon.getId();
     //TODO: Find the pokemon in the DOM. Hide it by adding the "hide" CSS property, if it does not already exist.
-
-}
+        document.getElementById(pokemonDOMId).classList.add('hide');
+    }
