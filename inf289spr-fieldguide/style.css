@@ -1,0 +1,241 @@
+:root {
+    --color-primary: #BAB2D8;
+    --color-secondary: #E6E989;
+    --color-text: #000000;
+    --color-background: #FDFCEC;
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    display: flex;
+    justify-content: center;
+}
+
+h1 {
+    font-family: "neulis-sans", sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0
+}
+
+h2 {
+    font-family: "neulis-sans", sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0;
+}
+
+h3 {
+    font-family: "neulis-sans", sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    margin: 20px 0 4px 0;
+}
+
+h4 {
+    font-family: "neulis-sans", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+}
+
+p {
+    font-family: "neulis-sans", sans-serif;
+    font-size: 14px;
+    font-weight: 100;
+    margin: 4px 0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    list-style-image: url('sqpurple.gif');
+}
+
+a {
+    font-family: "neulis-sans", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+hr {
+    border: none;
+    border-top: 2px solid var(--color-primary);
+    width: 100%;
+    margin: 20px 0;
+}
+
+.container {
+    display: flex;
+    padding: 0 40px;
+    align-items: flex-start;
+    gap: 40px;
+    max-width: 1280px;
+}
+
+.left-sidebar {
+    display: flex;
+    max-width: 316px;
+    padding: 64px 0;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 0 0;
+    align-self: stretch;
+}
+
+.nav {
+    display: flex;
+    max-width: 316px;
+    padding: 20px 24px;
+    flex-direction: column;
+    gap: 16px;
+    border-radius: 8px;
+    border: 2px solid #BAB2D8;
+    position: sticky;
+    top: 20px;
+}
+
+.timeline-outer {
+    position: relative;
+    max-width: 316px;
+    margin: 0 auto;
+    padding: 20px 20px 20px 48px;
+    overflow: hidden;
+}
+
+/* Timeline 
+.timeline-mask {
+    position: absolute;
+    left: 20px;
+    width: 4px;
+    background: var(--color-primary);
+    border-radius: 4px;
+    padding-bottom: 12px;
+    z-index: 2;
+    animation: increase linear forwards;
+    animation-timeline: --containerTimeline;
+}
+    */
+    
+.timeline-step.active .timeline-dot {
+    background-color: var(--color-secondary); /* yellow-green pop */
+    border-color: var(--color-secondary);
+    transform: scale(1.4);
+}
+
+.timeline-step.active a h4 {
+    font-size: 18px;
+    color: var(--color-primary);
+}
+
+/* make sure transitions apply on inactive too so it eases back */
+.timeline-dot {
+    position: absolute;
+    left: -34px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid var(--color-primary);
+    z-index: 3;
+    transition: all 0.3s ease;
+}
+
+.timeline-step a h4 {
+    transition: all 0.3s ease;
+}
+    
+@keyframes increase {
+    to {
+    height: calc(100% - 90px); /* keeps ends rounded & stops at bottom padding */
+    }
+}
+.timeline-step {
+    position: relative;
+    min-height: 48px;
+    width: 220px;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+/*
+.timeline-dot {
+    position: absolute;
+    left: -34px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    z-index: 3;
+    transition: background-color 0.3s ease;
+}
+.timeline-step:last-child {
+    margin-bottom: 0;
+}
+    */
+
+/* Responsive */
+@media (max-width: 640px) {
+    .timeline-outer {
+    padding: 30px 10px 30px 52px;
+    max-width: 98vw;
+    }
+    .timeline-mask {
+    left: 24px;
+    }
+    .timeline-dot {
+    left: -35px;
+    width: 18px;
+    height: 18px;
+    border-width: 4px;
+    }
+}
+
+.main {
+    display: flex;
+    max-width: 800px;
+    padding: 64px 20px 60vh 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 40px;
+    flex: 1 0 0;
+}
+
+.cover-image {
+    display: flex;
+    height: 210px;
+    padding: 20px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+}
+
+.cover-image img {
+    width: 231.212px;
+    flex: 1 0 0;
+    aspect-ratio: 109/99;
+}
+
+.section-header {
+    display: flex;
+    width: 100%;
+    padding: 8px;
+    align-items: flex-start;
+    background-color: var(--color-secondary);
+    border-radius: 8px 8px 0 0;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    width: 100%;
+}
