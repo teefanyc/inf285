@@ -55,8 +55,8 @@
     main{ padding-left: 236px; }
   }
   .rail-title{
-    font-family:'Space Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
-    color: rgba(var(--ink-rgb), 0.55);
+    font-family:'Space Mono', monospace; font-size: 10px; font-weight: 900;letter-spacing: 0.16em; text-transform: uppercase;
+    color:  white;
   }
   .rail-title.top{ margin-bottom: 16px; }
   .rail-title.bottom{ margin-top: 16px; }
@@ -326,7 +326,7 @@
     <div class="hero-inner">
       <div class="eyebrow">INF 286 &middot; Innovations in HCI</div>
       <h1>Trading the brush<br>for the <em>brief</em>.</h1>
-      <p>Five conversations trace how a graphic designer's relationship with an AI companion shifts &mdash; from correcting empty pixels to authoring nothing at all. Scroll to move through them.</p>
+      <p>Five sequentialconversations trace how a Graphic Designer's relationship with an AI companion shifts from correcting empty pixels to authoring nothing at all. Scroll to move through them.</p>
       <div class="hero-key" id="heroKey">
         <h4>Color key</h4>
         <div class="legend-body">
@@ -337,7 +337,7 @@
             <span class="legend-arrow-label">Low</span>
           </div>
           <div class="legend-rows">
-            <div class="legend-row"><span class="legend-dot" style="background:#EAEEF2;"></span><div class="legend-text"><b>Pale blue &mdash; Repair</b><span>Nearly all creative input still belongs to the designer.</span></div></div>
+            <div class="legend-row"><span class="legend-dot" style="background:#EAEEF2;"></span><div class="legend-text"><b>Pale blue &mdash; Extend</b><span>Nearly all creative input still belongs to the designer.</span></div></div>
             <div class="legend-row"><span class="legend-dot" style="background:#EAEEF2;"></span><div class="legend-text"><b>Pale blue &mdash; Local Edit</b><span>Creative input stays high; the designer directs each change.</span></div></div>
             <div class="legend-row"><span class="legend-dot" style="background:#DEE6DA;"></span><div class="legend-text"><b>Sage green &mdash; Composite</b><span>Creative input starts sharing space with AI assembly.</span></div></div>
             <div class="legend-row"><span class="legend-dot" style="background:#DE8A32;"></span><div class="legend-text"><b>Amber &mdash; Generation</b><span>Creative input narrows to a description; AI originates the image.</span></div></div>
@@ -354,16 +354,16 @@
     <div class="h2-row">
       <!-- Replace src with your own icon (e.g. /assets/repair.svg) -->
       <img class="stage-icon" alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233B6599' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M14.7 6.3a4 4 0 1 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2-2 2.1-2.1z'/></svg>">
-      <h2>Repair</h2>
+      <h2>Extend</h2>
     </div>
-    <p class="scenario">Generative Fill in Photoshop, used to extend an image past its edges &mdash; into space that was blank to begin with.</p>
+    <p class="scenario">Starts with Generative Fill feature in Photoshop, used to extend an image past its edges into space that was blank to begin with.</p>
     <div class="fact-box panel">
       <div><span class="meta-label">What the AI touches</span><span class="meta-value">Empty space only</span></div>
       <div><span class="meta-label">Trust level &mdash; minimal</span><div class="trust-bar"><div class="trust-fill" data-width="14"></div></div></div>
     </div>
     <div class="pull-quote panel">
       <div class="pull-quote-label">The designer's request</div>
-      <p class="pull-quote-text">&ldquo;remove sign&rdquo; &middot; &ldquo;grassy area lined with trees&rdquo;</p>
+      <p class="pull-quote-text">Left blank. Use integrated feature in Photoshop.</p>
     </div>
   </section>
 
@@ -374,14 +374,14 @@
       <img class="stage-icon" alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233B6599' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M12 20h9'/><path d='M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z'/></svg>">
       <h2>Local edit</h2>
     </div>
-    <p class="scenario">Touching up images by selecting areas and describing the fix. The AI now modifies content that already exists in the frame.</p>
+    <p class="scenario">Grows into touching up images by selecting areas and describing the fix. AI now modifies content that already exists in the frame.</p>
     <div class="fact-box panel">
-      <div><span class="meta-label">What the AI touches</span><span class="meta-value">Existing content, within one photo</span></div>
+      <div><span class="meta-label">What the AI touches</span><span class="meta-value">Existing content, within a photo</span></div>
       <div><span class="meta-label">Trust level &mdash; low to moderate</span><div class="trust-bar"><div class="trust-fill" data-width="34"></div></div></div>
     </div>
     <div class="pull-quote panel">
       <div class="pull-quote-label">The designer's request</div>
-      <p class="pull-quote-text">&ldquo;remove sign&rdquo; &middot; &ldquo;grassy area lined with trees&rdquo;</p>
+      <p class="pull-quote-text">&ldquo;remove sign&rdquo; </br>&ldquo;grassy area lined with trees&rdquo;</p>
     </div>
   </section>
 
@@ -392,7 +392,7 @@
       <img class="stage-icon" alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322848C' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 2 7 12 12 22 7 12 2'/><polyline points='2 17 12 22 22 17'/><polyline points='2 12 12 17 22 12'/></svg>">
       <h2>Composite</h2>
     </div>
-    <p class="scenario">Can't find the exact image needed, so pieces get combined instead &mdash; real elements, rearranged into something that didn't exist before.</p>
+    <p class="scenario">Can't find the exact image needed, so pieces get combined instead: real elements, rearranged into something that didn't exist before.</p>
     <div class="fact-box panel">
       <div><span class="meta-label">What the AI touches</span><span class="meta-value">Multiple sources, combined</span></div>
       <div><span class="meta-label">Trust level &mdash; moderate</span><div class="trust-bar"><div class="trust-fill" data-width="52"></div></div></div>
@@ -412,7 +412,7 @@
     </div>
     <p class="scenario">No source image at all now &mdash; just a description. The designer needs a small icon asset, and asks for it outright.</p>
     <div class="fact-box panel">
-      <div><span class="meta-label">What the AI touches</span><span class="meta-value">Nothing pre-existing &mdash; text to image</span></div>
+      <div><span class="meta-label">What the AI touches</span><span class="meta-value">Nothing pre-existing: text to image</span></div>
       <div><span class="meta-label">Trust level &mdash; moderate to high</span><div class="trust-bar"><div class="trust-fill" data-width="74"></div></div></div>
     </div>
     <div class="pull-quote panel">
@@ -428,9 +428,9 @@
       <img class="stage-icon" alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><polygon points='16 8 13.5 13.5 8 16 10.5 10.5 16 8'/></svg>">
       <h2>Creative direction</h2>
     </div>
-    <p class="scenario">The ask is no longer an asset. It's a strategy &mdash; a full set of branding directions. The designer stops making and starts choosing.</p>
+    <p class="scenario">The ask is no longer an asset. It's a strategy and a full set of branding directions. The designer stops <em>making</em> and starts <em>choosing</em>.</p>
     <div class="fact-box panel">
-      <div><span class="meta-label">What the AI touches</span><span class="meta-value">The concept itself</span></div>
+      <div><span class="meta-label">What the AI touches</span><span class="meta-value">The entire concept</span></div>
       <div><span class="meta-label">Trust level &mdash; high</span><div class="trust-bar"><div class="trust-fill" data-width="94"></div></div></div>
     </div>
     <div class="pull-quote panel">
@@ -442,9 +442,9 @@
   <section class="outro wrap" id="outro">
     <div class="outro-card panel" style="max-width:680px;">
       <span class="eyebrow">The open question</span>
-      <h2>Where did the designer's hand go &mdash; and does it come back?</h2>
+      <h2>Where does the designer's hand go and does it come back?</h2>
       <p>Each conversation hands the AI a little more of what used to be the designer's job alone. The visual language of this page follows that same curve: cooler and more contained at the start, bolder and eventually fully inverted by the end &mdash; creation giving way to curation.</p>
-      <p>What the lit review leaves open is whether that fade is a permanent rewiring of creative skill, or a temporary reallocation of it &mdash; attention moving from making to judging, rather than disappearing.</p>
+      <p>For human creativity, does this mean a permanent rewiring of creative skill, or a temporary reallocation of it?</p>
       <div class="credit">INF 286 &mdash; Innovations in HCI &middot; Assignment 2</div>
     </div>
   </section>
@@ -464,7 +464,7 @@
   ];
   var railMeta = [
     {id:'hero',    label:'Intro',              num:null},
-    {id:'stage-0', label:'Repair',              num:'01'},
+    {id:'stage-0', label:'Extend',              num:'01'},
     {id:'stage-1', label:'Local Edit',          num:'02'},
     {id:'stage-2', label:'Composite',           num:'03'},
     {id:'stage-3', label:'Generation',          num:'04'},
