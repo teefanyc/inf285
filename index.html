@@ -100,7 +100,10 @@
   /* ---------- Top-right controls: input arrow + legend ---------- */
   .top-controls{
     position: fixed; top: 24px; right: 24px; z-index: 60;
+    opacity: 0; transform: scale(0.7); pointer-events: none;
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(.22,.8,.32,1);
   }
+  .top-controls.docked{ opacity: 1; transform: scale(1); pointer-events: auto; }
   .legend-toggle{
     display:flex; align-items:center; gap: 9px;
     background: rgba(var(--bg-rgb-l), var(--card-alpha));
@@ -165,6 +168,21 @@
   .hero h1{ font-family:'Fraunces', serif; font-weight: 600; font-size: clamp(2.4rem, 6vw, 4.4rem); line-height: 1.04; margin: 0 0 26px; }
   .hero h1 em{ font-style: italic; font-weight: 500; color: rgb(var(--accent)); }
   .hero p{ font-size: 1.08rem; line-height: 1.62; color: rgba(var(--ink-rgb), 0.62); max-width: 48ch; margin: 0 0 40px; }
+  .hero-key{
+    background: rgba(255,255,255, var(--card-alpha));
+    border: 1px solid rgba(var(--ink-rgb), 0.16);
+    border-radius: 14px; padding: 20px 22px;
+    max-width: 480px; margin: 0 0 36px;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.08);
+    transform-origin: top right;
+    transition: opacity 0.55s ease, transform 0.55s cubic-bezier(.3,.8,.3,1), background-color 0.5s ease-out, border-color 0.5s ease-out;
+  }
+  .hero-key h4{
+    margin: 0 0 14px; font-family:'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: rgba(var(--ink-rgb), 0.55);
+  }
+  .hero-key.folded{ opacity: 0; transform: translate(380px, -260px) scale(0.16); pointer-events: none; }
+
   .scroll-cue{
     font-family:'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
     color: rgba(var(--ink-rgb), 0.55); display:flex; align-items:center; gap: 10px;
@@ -306,6 +324,24 @@
       <div class="eyebrow">INF 286 &middot; Innovations in HCI</div>
       <h1>Trading the brush<br>for the <em>brief</em>.</h1>
       <p>Five conversations trace how a graphic designer's relationship with an AI companion shifts &mdash; from correcting empty pixels to authoring nothing at all. Scroll to move through them.</p>
+      <div class="hero-key" id="heroKey">
+        <h4>Color key</h4>
+        <div class="legend-body">
+          <div class="legend-arrow-col">
+            <span class="legend-arrow-label">High</span>
+            <div class="legend-arrow-bar"></div>
+            <svg class="legend-arrow-head" width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 6 7 11 1"/></svg>
+            <span class="legend-arrow-label">Low</span>
+          </div>
+          <div class="legend-rows">
+            <div class="legend-row"><span class="legend-dot" style="background:#EAEEF2;"></span><div class="legend-text"><b>Pale blue &mdash; Repair</b><span>Nearly all creative input still belongs to the designer.</span></div></div>
+            <div class="legend-row"><span class="legend-dot" style="background:#EAEEF2;"></span><div class="legend-text"><b>Pale blue &mdash; Local Edit</b><span>Creative input stays high; the designer directs each change.</span></div></div>
+            <div class="legend-row"><span class="legend-dot" style="background:#DEE6DA;"></span><div class="legend-text"><b>Sage green &mdash; Composite</b><span>Creative input starts sharing space with AI assembly.</span></div></div>
+            <div class="legend-row"><span class="legend-dot" style="background:#DE8A32;"></span><div class="legend-text"><b>Amber &mdash; Generation</b><span>Creative input narrows to a description; AI originates the image.</span></div></div>
+            <div class="legend-row"><span class="legend-dot" style="background:#B4522A;"></span><div class="legend-text"><b>Rust &mdash; Creative Direction</b><span>Creative input shrinks to choosing among AI-made options.</span></div></div>
+          </div>
+        </div>
+      </div>
       <div class="scroll-cue">Scroll</div>
     </div>
   </section>
@@ -504,14 +540,34 @@
     nodeEls.forEach(function(n, i){ n.classList.toggle('active', i === activeIdx); });
   }
 
+  var heroKeyEl = document.getElementById('heroKey');
+  var topControlsEl = document.querySelector('.top-controls');
+  var legendToggle = document.getElementById('legendToggle');
+  var legendPanel = document.getElementById('legendPanel');
+  var keyDocked = false;
+  function updateHeroKey(){
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var vh = window.innerHeight;
+    if(!keyDocked && scrollTop > vh * 0.32){
+      keyDocked = true;
+      heroKeyEl.classList.add('folded');
+      topControlsEl.classList.add('docked');
+    } else if(keyDocked && scrollTop < vh * 0.2){
+      keyDocked = false;
+      heroKeyEl.classList.remove('folded');
+      topControlsEl.classList.remove('docked');
+      legendPanel.classList.remove('open');
+    }
+  }
+
   var ticking = false;
   window.addEventListener('scroll', function(){
-    if(!ticking){ requestAnimationFrame(function(){ update(); ticking = false; }); ticking = true; }
+    if(!ticking){ requestAnimationFrame(function(){ update(); updateHeroKey(); ticking = false; }); ticking = true; }
   }, { passive: true });
-  window.addEventListener('resize', function(){ measure(); update(); });
+  window.addEventListener('resize', function(){ measure(); update(); updateHeroKey(); });
 
-  window.addEventListener('load', function(){ measure(); update(); });
-  measure(); update();
+  window.addEventListener('load', function(){ measure(); update(); updateHeroKey(); });
+  measure(); update(); updateHeroKey();
 
   var sections = document.querySelectorAll('.stage');
   var observer = new IntersectionObserver(function(entries){
@@ -528,8 +584,6 @@
   }, { threshold: 0.4 });
   sections.forEach(function(s){ observer.observe(s); });
 
-  var legendToggle = document.getElementById('legendToggle');
-  var legendPanel = document.getElementById('legendPanel');
   legendToggle.addEventListener('click', function(){ legendPanel.classList.toggle('open'); });
   document.addEventListener('click', function(e){
     if(!legendPanel.contains(e.target) && !legendToggle.contains(e.target)){
