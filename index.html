@@ -15,6 +15,8 @@
     --ink-rgb: 43,36,32;
     --accent: 59,101,153;
     --trust-color: 59,101,153;
+    --num-color: 59,101,153;
+    --rail-color: 59,101,153;
     --card-alpha: 0.95;
   }
   *{ box-sizing:border-box; }
@@ -95,7 +97,8 @@
     display:block; font-family: 'Fraunces', serif; font-size: 14px; font-weight: 700;
     color: rgba(var(--ink-rgb), 0.8); margin-bottom: 1px; transition: color 0.25s ease;
   }
-  .rail-node.active .rail-node-text, .rail-node.active .rail-node-text b{ color: rgb(var(--accent)); }
+  .rail-node.active .rail-node-text{ color: rgb(var(--rail-color)); }
+  .rail-node.active .rail-node-text b{ color: rgb(var(--num-color)); }
 
   /* ---------- Top-right controls: input arrow + legend ---------- */
   .top-controls{
@@ -206,7 +209,7 @@
     transition: opacity 0.5s ease, transform 0.5s ease;
   }
   .stage.in-view .stage-head{ opacity:1; transform: translateY(0); }
-  .stage-num{ font-family:'Fraunces', serif; font-weight: 700; font-size: 2rem; line-height:1; color: rgb(var(--accent)); transition: color 0.4s ease-out; }
+  .stage-num{ font-family:'Fraunces', serif; font-weight: 700; font-size: 2rem; line-height:1; color: rgb(var(--num-color)); transition: color 0.4s ease-out; }
   .stage-name{ font-family:'Space Mono', monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(var(--ink-rgb), 0.55); }
 
   .h2-row{ display:flex; align-items:center; gap: 14px; margin-bottom: 16px; }
@@ -451,13 +454,13 @@
 <script>
 (function(){
   var stops = [
-    { bg:[234,238,242], ink:[43,36,32],   accent:[59,101,153],  trust:[59,101,153],   alpha:0.95 }, // Intro
-    { bg:[234,238,242], ink:[43,36,32],   accent:[59,101,153],  trust:[59,101,153],   alpha:0.95 }, // Repair
-    { bg:[234,238,242], ink:[43,36,32],   accent:[59,101,153],  trust:[59,101,153],   alpha:0.95 }, // Local Edit
-    { bg:[222,230,218], ink:[51,51,51],   accent:[34,140,132],  trust:[34,140,132],   alpha:0.88 }, // Composite
-    { bg:[222,138,50],  ink:[253,245,232],accent:[225,150,71],  trust:[255,255,255],  alpha:0.20 }, // Generation
-    { bg:[186,86,40],   ink:[255,255,255],accent:[193,103,62],  trust:[255,255,255],  alpha:0.16 }, // Creative Direction
-    { bg:[144,24,70],   ink:[255,255,255],accent:[177,93,126],  trust:[255,255,255],  alpha:0.12 }  // Conclusion
+    { bg:[234,238,242], ink:[43,36,32],   accent:[59,101,153],  trust:[59,101,153],   num:[59,101,153],   rail:[59,101,153],  alpha:0.95 }, // Intro
+    { bg:[234,238,242], ink:[43,36,32],   accent:[59,101,153],  trust:[59,101,153],   num:[59,101,153],   rail:[59,101,153],  alpha:0.95 }, // Repair
+    { bg:[234,238,242], ink:[43,36,32],   accent:[59,101,153],  trust:[59,101,153],   num:[59,101,153],   rail:[59,101,153],  alpha:0.95 }, // Local Edit
+    { bg:[222,230,218], ink:[51,51,51],   accent:[34,140,132],  trust:[34,140,132],   num:[34,140,132],   rail:[34,140,132],  alpha:0.88 }, // Composite
+    { bg:[222,138,50],  ink:[253,245,232],accent:[167,112,53],  trust:[255,255,255],  num:[255,255,255],  rail:[110,68,28],   alpha:0.20 }, // Generation
+    { bg:[186,86,40],   ink:[255,255,255],accent:[193,103,62],  trust:[255,255,255],  num:[255,255,255],  rail:[95,42,20],    alpha:0.16 }, // Creative Direction
+    { bg:[144,24,70],   ink:[255,255,255],accent:[177,93,126],  trust:[255,255,255],  num:[255,255,255],  rail:[177,93,126],  alpha:0.12 }  // Conclusion
   ];
   var railMeta = [
     {id:'hero',    label:'Intro',              num:null},
@@ -517,6 +520,8 @@
     var ink = [0,1,2].map(function(k){ return Math.round(lerp(s0.ink[k], s1.ink[k], frac)); });
     var accent = [0,1,2].map(function(k){ return Math.round(lerp(s0.accent[k], s1.accent[k], frac)); });
     var trust = [0,1,2].map(function(k){ return Math.round(lerp(s0.trust[k], s1.trust[k], frac)); });
+    var num = [0,1,2].map(function(k){ return Math.round(lerp(s0.num[k], s1.num[k], frac)); });
+    var railColor = [0,1,2].map(function(k){ return Math.round(lerp(s0.rail[k], s1.rail[k], frac)); });
     var alpha = lerp(s0.alpha, s1.alpha, frac);
 
     var clamp255 = function(v){ return Math.max(0, Math.min(255, v)); };
@@ -529,6 +534,8 @@
     root.style.setProperty('--ink-rgb', ink.join(','));
     root.style.setProperty('--accent', accent.join(','));
     root.style.setProperty('--trust-color', trust.join(','));
+    root.style.setProperty('--num-color', num.join(','));
+    root.style.setProperty('--rail-color', railColor.join(','));
     root.style.setProperty('--card-alpha', alpha.toFixed(2));
 
     var overallProgress = (segIdx + frac) / (stops.length - 1);
