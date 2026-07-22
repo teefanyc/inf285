@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading the Brush for the Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-rgb: 234,238,242;
+    --bg-rgb-l: 246,248,250;
+    --bg-rgb-d: 220,225,230;
+    --ink-rgb: 43,36,32;
+    --accent: 59,101,153;
+    --card-alpha: 0.95;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-snap-type: none !important; }
+  }
+  body{
+    margin:0;
+    background: linear-gradient(165deg, rgb(var(--bg-rgb-l)) 0%, rgb(var(--bg-rgb)) 55%, rgb(var(--bg-rgb-d)) 100%);
+    color: rgb(var(--ink-rgb));
+    font-family: 'Inter', sans-serif;
+    transition: background 0.5s ease-out, color 0.5s ease-out;
+    overflow-x: hidden;
+  }
+  ::selection{ background: rgba(var(--accent), 0.3); }
+  a{ color: inherit; }
+  main{ scroll-snap-type: y proximity; }
+  section{ scroll-snap-align: start; }
+
+  /* ---------- Left wayfinding rail ---------- */
+  .rail{ display:none; }
+  @media (min-width: 1150px){
+    .rail{
+      display:flex; flex-direction:column; align-items:center;
+      position: fixed; left: 26px; top: 50%; transform: translateY(-50%); z-index: 50;
+      width: 208px;
+      background: rgba(var(--bg-rgb-l), var(--card-alpha));
+      border: 1px solid rgba(var(--ink-rgb), 0.16);
+      border-radius: 16px; padding: 20px 18px;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.10);
+      backdrop-filter: blur(10px);
+      transition: background-color 0.5s ease-out, border-color 0.5s ease-out;
+    }
+    main{ padding-left: 236px; }
+  }
+  .rail-title{
+    font-family:'Space Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(var(--ink-rgb), 0.55);
+  }
+  .rail-title.top{ margin-bottom: 16px; }
+  .rail-title.bottom{ margin-top: 16px; }
+  .rail-body{ position: relative; display:flex; height: 380px; width: 100%; }
+  .rail-line{ position: relative; width: 2px; background: rgba(var(--ink-rgb), 0.16); border-radius: 2px; flex-shrink: 0; }
+  .rail-line-fill{
+    position: absolute; top:0; left:0; width:100%; height: 0%;
+    background: rgb(var(--accent)); border-radius: 2px;
+    transition: height 0.05s linear, background-color 0.4s ease-out;
+  }
+  .rail-marker{
+    position: absolute; left: 50%; top: 0%; width: 12px; height: 12px; margin-left: -6px; margin-top: -6px;
+    border-radius: 50%; background: rgb(var(--accent));
+    box-shadow: 0 0 0 5px rgba(var(--accent), 0.22), 0 0 12px rgba(var(--accent), 0.5);
+    transition: top 0.05s linear, background-color 0.4s ease-out, box-shadow 0.4s ease-out;
+  }
+  .rail-nodes{ position:relative; width:100%; }
+  .rail-node{
+    position:absolute; left: -3px; transform: translateY(-50%);
+    display:flex; align-items:flex-start; gap: 10px; width: 100%;
+    background: none; border: none; padding: 3px 0; font-family: inherit; cursor: pointer; text-align: left;
+  }
+  .rail-node-dot{
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(var(--bg-rgb-l), 1); border: 2px solid rgba(var(--ink-rgb), 0.3);
+    flex-shrink: 0; margin-top: 3px; transition: all 0.25s ease;
+  }
+  .rail-node.active .rail-node-dot{
+    background: rgb(var(--accent)); border-color: rgb(var(--accent));
+    animation: nodePop 0.5s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes nodePop{ 0%{ transform: scale(0.6); } 60%{ transform: scale(1.4); } 100%{ transform: scale(1); } }
+  .rail-node-text{
+    font-family:'Space Mono', monospace; font-size: 10px; line-height: 1.35;
+    color: rgba(var(--ink-rgb), 0.5); max-width: 148px; overflow-wrap: break-word; transition: color 0.25s ease;
+  }
+  .rail-node-text b{
+    display:block; font-family: 'Fraunces', serif; font-size: 14px; font-weight: 700;
+    color: rgba(var(--ink-rgb), 0.8); margin-bottom: 1px; transition: color 0.25s ease;
+  }
+  .rail-node.active .rail-node-text, .rail-node.active .rail-node-text b{ color: rgb(var(--accent)); }
+
+  /* ---------- Top-right controls: input arrow + legend ---------- */
+  .top-controls{
+    position: fixed; top: 24px; right: 24px; z-index: 60;
+  }
+  .legend-toggle{
+    display:flex; align-items:center; gap: 9px;
+    background: rgba(var(--bg-rgb-l), var(--card-alpha));
+    border: 1px solid rgba(var(--ink-rgb), 0.16);
+    border-radius: 999px; padding: 9px 15px 9px 9px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12); backdrop-filter: blur(10px);
+    cursor:pointer; font-family:'Space Mono', monospace; font-size: 10.5px; letter-spacing: 0.05em;
+    color: rgb(var(--ink-rgb)); transition: background-color 0.5s ease-out, border-color 0.5s ease-out, color 0.5s ease-out;
+  }
+  .legend-swatches{ display:flex; }
+  .legend-swatches span{ width: 12px; height: 12px; border-radius: 50%; display:block; margin-left: -4px; border: 2px solid rgb(var(--bg-rgb-l)); }
+  .legend-swatches span:first-child{ margin-left:0; }
+  .legend-panel{
+    position: fixed; right: 24px; top: 70px; z-index: 60; width: 340px;
+    background: rgba(var(--bg-rgb-l), var(--card-alpha));
+    border: 1px solid rgba(var(--ink-rgb), 0.16);
+    border-radius: 14px; padding: 18px;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.16); backdrop-filter: blur(10px);
+    opacity: 0; transform: translateY(-8px); pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease, background-color 0.5s ease-out, border-color 0.5s ease-out;
+  }
+  .legend-panel.open{ opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .legend-panel h4{
+    margin: 0 0 14px; font-family:'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: rgba(var(--ink-rgb), 0.55);
+  }
+  .legend-body{ display:flex; gap: 14px; align-items: stretch; }
+  .legend-arrow-col{
+    display:flex; flex-direction:column; align-items:center; gap: 5px; width: 20px; flex-shrink:0;
+  }
+  .legend-arrow-label{
+    font-family:'Space Mono', monospace; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(var(--ink-rgb), 0.55);
+  }
+  .legend-arrow-bar{
+    width: 7px; flex: 1; min-height: 60px; border-radius: 4px;
+    background: linear-gradient(to bottom, #EAEEF2 0%, #EAEEF2 20%, #DEE6DA 42%, #DE8A32 68%, #B4522A 100%);
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+  .legend-arrow-head{ color: rgba(var(--ink-rgb), 0.55); }
+  .legend-rows{ flex: 1; min-width: 0; }
+  .legend-row{ display:flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+  .legend-row:last-child{ margin-bottom: 0; }
+  .legend-dot{ width: 14px; height: 14px; border-radius: 50%; margin-top: 3px; flex-shrink:0; border: 1px solid rgba(0,0,0,0.1); }
+  .legend-text b{ display:block; font-size: 12.5px; margin-bottom: 2px; color: rgb(var(--ink-rgb)); }
+  .legend-text span{ font-size: 11.5px; color: rgba(var(--ink-rgb), 0.6); line-height: 1.4; }
+  @media (max-width: 640px){ .legend-panel{ width: calc(100vw - 48px); } }
+
+  /* ---------- Layout ---------- */
+  .wrap{ max-width: 760px; margin: 0 auto; padding: 0 32px; }
+  section{ min-height: 100vh; display:flex; flex-direction:column; justify-content:center; position: relative; padding: 90px 0; }
+  .panel{ width: 100%; max-width: 620px; }
+
+  /* ---------- Hero ---------- */
+  .hero{ align-items:flex-start; }
+  .hero-inner{ max-width: 620px; }
+  .hero .eyebrow{
+    display:inline-block; font-family:'Space Mono', monospace; font-size: 11.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: rgba(var(--ink-rgb), 0.55); margin-bottom: 26px;
+    padding: 7px 12px; border: 1px solid rgba(var(--ink-rgb), 0.16); border-radius: 999px;
+  }
+  .hero h1{ font-family:'Fraunces', serif; font-weight: 600; font-size: clamp(2.4rem, 6vw, 4.4rem); line-height: 1.04; margin: 0 0 26px; }
+  .hero h1 em{ font-style: italic; font-weight: 500; color: rgb(var(--accent)); }
+  .hero p{ font-size: 1.08rem; line-height: 1.62; color: rgba(var(--ink-rgb), 0.62); max-width: 48ch; margin: 0 0 40px; }
+  .scroll-cue{
+    font-family:'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(var(--ink-rgb), 0.55); display:flex; align-items:center; gap: 10px;
+  }
+  .scroll-cue::after{ content:''; width: 22px; height: 1px; background: rgba(var(--ink-rgb), 0.5); animation: pulse-line 1.8s ease-in-out infinite; }
+  @keyframes pulse-line{ 0%,100%{ width: 12px; opacity:0.4; } 50%{ width: 32px; opacity:1; } }
+
+  /* ---------- Stage ---------- */
+  .stage{ overflow: hidden; border-top: 1px solid rgba(var(--ink-rgb), 0.12); }
+  .stage::before{
+    content:''; position:absolute; top: -12%; right: -10%;
+    width: 42vw; height: 42vw; max-width: 520px; max-height: 520px; border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, var(--pop) 0%, transparent 68%);
+    opacity: var(--pop-op, 0.24); filter: blur(10px); pointer-events: none; z-index: 0;
+  }
+  .stage > *{ position: relative; z-index: 1; }
+
+  .stage-head{ display:flex; align-items: baseline; gap: 16px; margin-bottom: 18px; }
+  .stage-num{ font-family:'Fraunces', serif; font-weight: 700; font-size: 2rem; line-height:1; color: rgb(var(--accent)); transition: color 0.4s ease-out; }
+  .stage-name{ font-family:'Space Mono', monospace; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(var(--ink-rgb), 0.55); }
+
+  .h2-row{ display:flex; align-items:center; gap: 14px; margin-bottom: 16px; }
+  .stage-icon{ width: 30px; height: 30px; flex-shrink: 0; display:block; }
+  .stage h2{
+    font-family:'Fraunces', serif; font-weight: 600; font-size: clamp(1.9rem, 4vw, 2.7rem);
+    margin: 0; opacity: 0; transform: translateY(16px) scale(0.97);
+  }
+  .stage.in-view h2{ animation: stagePop 0.7s cubic-bezier(.2,.9,.25,1.15) forwards; }
+  @keyframes stagePop{
+    0%{ opacity:0; transform: translateY(16px) scale(0.96); }
+    65%{ opacity:1; transform: translateY(-3px) scale(1.015); }
+    100%{ opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  .scenario{ font-size: 1rem; color: rgba(var(--ink-rgb), 0.62); margin: 0 0 26px; max-width: 54ch; line-height: 1.58; }
+
+  .fact-box{
+    background: rgba(255,255,255, var(--card-alpha));
+    border: 1px solid rgba(var(--ink-rgb), 0.16);
+    border-radius: 14px; padding: 18px 20px;
+    display:flex; gap: 30px; flex-wrap: wrap; margin-bottom: 22px;
+    transition: background-color 0.5s ease-out, border-color 0.5s ease-out;
+  }
+  .meta-label{
+    font-family:'Space Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(var(--ink-rgb), 0.55); display:block; margin-bottom: 7px;
+  }
+  .meta-value{ font-size: 0.95rem; font-weight: 600; }
+  .trust-bar{ width: 130px; height: 5px; background: rgba(var(--ink-rgb),0.12); border-radius: 3px; margin-top: 9px; overflow: hidden; }
+  .trust-fill{ height: 100%; border-radius: 3px; background: rgb(var(--accent)); transition: background-color 0.4s ease-out; width: 0%; }
+
+  .pull-quote{
+    background: rgba(255,255,255, var(--card-alpha));
+    border: 1px solid rgba(var(--ink-rgb), 0.16);
+    border-left: 4px solid rgb(var(--accent));
+    border-radius: 4px 14px 14px 4px; padding: 22px 24px;
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.7s ease 0.12s, transform 0.7s ease 0.12s, background-color 0.5s ease-out, border-color 0.5s ease-out;
+  }
+  .stage.in-view .pull-quote{ opacity:1; transform: translateY(0); }
+  .pull-quote-label{ font-family:'Space Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(var(--ink-rgb), 0.5); margin-bottom: 10px; }
+  .pull-quote-text{ font-family: 'Fraunces', serif; font-style: italic; font-weight: 500; font-size: clamp(1.1rem, 2vw, 1.4rem); line-height: 1.5; margin: 0; }
+
+  /* ---------- Outro ---------- */
+  .outro{ border-top: 1px solid rgba(var(--ink-rgb), 0.14); align-items:flex-start; }
+  .outro-card{
+    background: rgba(255,255,255, var(--card-alpha));
+    border: 1px solid rgba(var(--ink-rgb), 0.18);
+    border-radius: 18px; padding: 44px; max-width: 680px;
+    transition: background-color 0.5s ease-out, border-color 0.5s ease-out;
+  }
+  .outro .eyebrow{ font-family:'Space Mono', monospace; font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(var(--ink-rgb), 0.55); margin-bottom: 22px; display:block; }
+  .outro h2{ font-family:'Fraunces', serif; font-style: italic; font-weight: 500; font-size: clamp(1.6rem, 3.2vw, 2.3rem); line-height: 1.35; margin: 0 0 22px; }
+  .outro p{ font-size: 1rem; line-height: 1.65; color: rgba(var(--ink-rgb), 0.62); margin: 0 0 14px; }
+  .outro .credit{ margin-top: 30px; font-family:'Space Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(var(--ink-rgb), 0.55); }
+
+  .mobile-indicator{ display:none; position: fixed; top: 0; left:0; right:0; height: 4px; background: rgba(var(--ink-rgb),0.14); z-index: 60; }
+  .mobile-indicator-fill{ height:100%; width:0%; background: rgb(var(--accent)); transition: width 0.05s linear, background-color 0.4s ease-out; }
+  @media (max-width: 1149px){ .mobile-indicator{ display:block; } }
+</style>
+</head>
+<body>
+
+<div class="mobile-indicator"><div class="mobile-indicator-fill" id="mobileFill"></div></div>
+
+<div class="top-controls">
+  <div class="legend-toggle" id="legendToggle">
+    <span class="legend-swatches"><span style="background:#EAEEF2;"></span><span style="background:#DEE6DA;"></span><span style="background:#DE8A32;"></span><span style="background:#B4522A;"></span></span>
+    Color key
+  </div>
+</div>
+<div class="legend-panel" id="legendPanel">
+  <h4>Color key</h4>
+  <div class="legend-body">
+    <div class="legend-arrow-col">
+      <span class="legend-arrow-label">High</span>
+      <div class="legend-arrow-bar"></div>
+      <svg class="legend-arrow-head" width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 1 6 7 11 1"/></svg>
+      <span class="legend-arrow-label">Low</span>
+    </div>
+    <div class="legend-rows">
+      <div class="legend-row"><span class="legend-dot" style="background:#EAEEF2;"></span><div class="legend-text"><b>Pale blue &mdash; Repair</b><span>Nearly all creative input still belongs to the designer.</span></div></div>
+      <div class="legend-row"><span class="legend-dot" style="background:#EAEEF2;"></span><div class="legend-text"><b>Pale blue &mdash; Local Edit</b><span>Creative input stays high; the designer directs each change.</span></div></div>
+      <div class="legend-row"><span class="legend-dot" style="background:#DEE6DA;"></span><div class="legend-text"><b>Sage green &mdash; Composite</b><span>Creative input starts sharing space with AI assembly.</span></div></div>
+      <div class="legend-row"><span class="legend-dot" style="background:#DE8A32;"></span><div class="legend-text"><b>Amber &mdash; Generation</b><span>Creative input narrows to a description; AI originates the image.</span></div></div>
+      <div class="legend-row"><span class="legend-dot" style="background:#B4522A;"></span><div class="legend-text"><b>Rust &mdash; Creative Direction</b><span>Creative input shrinks to choosing among AI-made options.</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="rail">
+  <div class="rail-title top">Creation</div>
+  <div class="rail-body">
+    <div class="rail-line"><div class="rail-line-fill" id="railFill"></div><div class="rail-marker" id="railMarker"></div></div>
+    <div class="rail-nodes" id="railNodes"></div>
+  </div>
+  <div class="rail-title bottom">Curation</div>
+</div>
+
+<main>
+
+  <section class="hero wrap" id="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">INF 286 &middot; Innovations in HCI</div>
+      <h1>Trading the brush<br>for the <em>brief</em>.</h1>
+      <p>Five conversations trace how a graphic designer's relationship with an AI companion shifts &mdash; from correcting empty pixels to authoring nothing at all. Scroll to move through them.</p>
+      <div class="scroll-cue">Scroll</div>
+    </div>
+  </section>
+
+  <section class="stage wrap" data-stage="0" id="stage-0" style="--pop:#D98C6E; --pop-op:0.26;">
+    <div class="stage-head"><span class="stage-num">01</span><span class="stage-name">First conversation</span></div>
+    <div class="h2-row">
+      <!-- Replace src with your own icon (e.g. /assets/repair.svg) -->
+      <img class="stage-icon" alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233B6599' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M14.7 6.3a4 4 0 1 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.1 2.1-2-2 2.1-2.1z'/></svg>">
+      <h2>Repair</h2>
+    </div>
+    <p class="scenario">Generative Fill in Photoshop, used to extend an image past its edges &mdash; into space that was blank to begin with.</p>
+    <div class="fact-box panel">
+      <div><span class="meta-label">What the AI touches</span><span class="meta-value">Empty space only</span></div>
+      <div><span class="meta-label">Trust level &mdash; minimal</span><div class="trust-bar"><div class="trust-fill" data-width="14"></div></div></div>
+    </div>
+    <div class="pull-quote panel">
+      <div class="pull-quote-label">The designer's request</div>
+      <p class="pull-quote-text">&ldquo;remove sign&rdquo; &middot; &ldquo;grassy area lined with trees&rdquo;</p>
+    </div>
+  </section>
+
+  <section class="stage wrap" data-stage="1" id="stage-1" style="--pop:#E8A844; --pop-op:0.24;">
+    <div class="stage-head"><span class="stage-num">02</span><span class="stage-name">Second conversation</span></div>
+    <div class="h2-row">
+      <!-- Replace src with your own icon (e.g. /assets/local-edit.svg) -->
+      <img class="stage-icon" alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233B6599' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M12 20h9'/><path d='M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z'/></svg>">
+      <h2>Local edit</h2>
+    </div>
+    <p class="scenario">Touching up images by selecting areas and describing the fix. The AI now modifies content that already exists in the frame.</p>
+    <div class="fact-box panel">
+      <div><span class="meta-label">What the AI touches</span><span class="meta-value">Existing content, within one photo</span></div>
+      <div><span class="meta-label">Trust level &mdash; low to moderate</span><div class="trust-bar"><div class="trust-fill" data-width="34"></div></div></div>
+    </div>
+    <div class="pull-quote panel">
+      <div class="pull-quote-label">The designer's request</div>
+      <p class="pull-quote-text">&ldquo;remove sign&rdquo; &middot; &ldquo;grassy area lined with trees&rdquo;</p>
+    </div>
+  </section>
+
+  <section class="stage wrap" data-stage="2" id="stage-2" style="--pop:#D65A82; --pop-op:0.20;">
+    <div class="stage-head"><span class="stage-num">03</span><span class="stage-name">Third conversation</span></div>
+    <div class="h2-row">
+      <!-- Replace src with your own icon (e.g. /assets/composite.svg) -->
+      <img class="stage-icon" alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322848C' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 2 7 12 12 22 7 12 2'/><polyline points='2 17 12 22 22 17'/><polyline points='2 12 12 17 22 12'/></svg>">
+      <h2>Composite</h2>
+    </div>
+    <p class="scenario">Can't find the exact image needed, so pieces get combined instead &mdash; real elements, rearranged into something that didn't exist before.</p>
+    <div class="fact-box panel">
+      <div><span class="meta-label">What the AI touches</span><span class="meta-value">Multiple sources, combined</span></div>
+      <div><span class="meta-label">Trust level &mdash; moderate</span><div class="trust-bar"><div class="trust-fill" data-width="52"></div></div></div>
+    </div>
+    <div class="pull-quote panel">
+      <div class="pull-quote-label">The designer's request</div>
+      <p class="pull-quote-text">&ldquo;insert a winding road through the mountains with no cars on it&rdquo;</p>
+    </div>
+  </section>
+
+  <section class="stage wrap" data-stage="3" id="stage-3" style="--pop:#405AA8; --pop-op:0.24;">
+    <div class="stage-head"><span class="stage-num">04</span><span class="stage-name">Fourth conversation</span></div>
+    <div class="h2-row">
+      <!-- Replace src with your own icon (e.g. /assets/generation.svg) -->
+      <img class="stage-icon" alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FBF3E6' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2l1.8 5.2L19 9l-5.2 1.8L12 16l-1.8-5.2L5 9l5.2-1.8L12 2z'/><path d='M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15z'/></svg>">
+      <h2>Generation</h2>
+    </div>
+    <p class="scenario">No source image at all now &mdash; just a description. The designer needs a small icon asset, and asks for it outright.</p>
+    <div class="fact-box panel">
+      <div><span class="meta-label">What the AI touches</span><span class="meta-value">Nothing pre-existing &mdash; text to image</span></div>
+      <div><span class="meta-label">Trust level &mdash; moderate to high</span><div class="trust-bar"><div class="trust-fill" data-width="74"></div></div></div>
+    </div>
+    <div class="pull-quote panel">
+      <div class="pull-quote-label">The designer's request</div>
+      <p class="pull-quote-text">&ldquo;line icon of a front-facing car with a wrench icon behind it&rdquo;</p>
+    </div>
+  </section>
+
+  <section class="stage wrap" data-stage="4" id="stage-4" style="--pop:#405AA8; --pop-op:0.22;">
+    <div class="stage-head"><span class="stage-num">05</span><span class="stage-name">Fifth conversation</span></div>
+    <div class="h2-row">
+      <!-- Replace src with your own icon (e.g. /assets/creative-direction.svg) -->
+      <img class="stage-icon" alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><polygon points='16 8 13.5 13.5 8 16 10.5 10.5 16 8'/></svg>">
+      <h2>Creative direction</h2>
+    </div>
+    <p class="scenario">The ask is no longer an asset. It's a strategy &mdash; a full set of branding directions. The designer stops making and starts choosing.</p>
+    <div class="fact-box panel">
+      <div><span class="meta-label">What the AI touches</span><span class="meta-value">The concept itself</span></div>
+      <div><span class="meta-label">Trust level &mdash; high</span><div class="trust-bar"><div class="trust-fill" data-width="94"></div></div></div>
+    </div>
+    <div class="pull-quote panel">
+      <div class="pull-quote-label">The designer's request</div>
+      <p class="pull-quote-text">&ldquo;can you show me 3 different versions of branding concepts for an automotive parts &amp; service marketing campaign?&rdquo;</p>
+    </div>
+  </section>
+
+  <section class="outro wrap" id="outro">
+    <div class="outro-card panel" style="max-width:680px;">
+      <span class="eyebrow">The open question</span>
+      <h2>Where did the designer's hand go &mdash; and does it come back?</h2>
+      <p>Each conversation hands the AI a little more of what used to be the designer's job alone. The visual language of this page follows that same curve: cooler and more contained at the start, bolder and eventually fully inverted by the end &mdash; creation giving way to curation.</p>
+      <p>What the lit review leaves open is whether that fade is a permanent rewiring of creative skill, or a temporary reallocation of it &mdash; attention moving from making to judging, rather than disappearing.</p>
+      <div class="credit">INF 286 &mdash; Innovations in HCI &middot; Assignment 2</div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var stops = [
+    { bg:[234,238,242], ink:[43,36,32],   accent:[59,101,153],  alpha:0.95 }, // Intro
+    { bg:[234,238,242], ink:[43,36,32],   accent:[59,101,153],  alpha:0.95 }, // Repair
+    { bg:[234,238,242], ink:[43,36,32],   accent:[59,101,153],  alpha:0.95 }, // Local Edit
+    { bg:[222,230,218], ink:[51,51,51],   accent:[34,140,132],  alpha:0.88 }, // Composite
+    { bg:[222,138,50],  ink:[253,245,232],accent:[232,173,112], alpha:0.20 }, // Generation
+    { bg:[186,86,40],   ink:[255,255,255],accent:[207,137,105], alpha:0.16 }, // Creative Direction
+    { bg:[186,86,40],   ink:[255,255,255],accent:[207,137,105], alpha:0.16 }  // Conclusion
+  ];
+  var railMeta = [
+    {id:'hero',    label:'Intro',              num:null},
+    {id:'stage-0', label:'Repair',              num:'01'},
+    {id:'stage-1', label:'Local Edit',          num:'02'},
+    {id:'stage-2', label:'Composite',           num:'03'},
+    {id:'stage-3', label:'Generation',          num:'04'},
+    {id:'stage-4', label:'Creative Direction',  num:'05'},
+    {id:'outro',   label:'Conclusion',          num:null}
+  ];
+
+  var root = document.documentElement;
+  var railFill = document.getElementById('railFill');
+  var railMarker = document.getElementById('railMarker');
+  var railNodesEl = document.getElementById('railNodes');
+  var mobileFill = document.getElementById('mobileFill');
+
+  var trackEls = railMeta.map(function(m){ return document.getElementById(m.id); });
+  var nodeEls = [];
+  railMeta.forEach(function(m, i){
+    var btn = document.createElement('button');
+    btn.className = 'rail-node';
+    btn.setAttribute('aria-label', 'Go to ' + m.label);
+    btn.innerHTML = '<span class="rail-node-dot"></span><span class="rail-node-text">'+(m.num ? '<b>'+m.num+'</b>' : '')+m.label+'</span>';
+    btn.addEventListener('click', function(){
+      var target = document.getElementById(m.id);
+      if(target){ target.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+    railNodesEl.appendChild(btn);
+    nodeEls.push(btn);
+  });
+
+  document.querySelectorAll('.trust-fill').forEach(function(el){
+    requestAnimationFrame(function(){ el.style.width = el.getAttribute('data-width') + '%'; });
+  });
+
+  function lerp(a,b,t){ return a + (b-a)*t; }
+
+  var anchors = [];
+  function measure(){
+    anchors = trackEls.map(function(el){ return el.offsetTop; });
+    anchors.push(document.documentElement.scrollHeight - window.innerHeight);
+    nodeEls.forEach(function(n, i){
+      var range = anchors[anchors.length-1] - anchors[0];
+      var pct = range > 0 ? ((anchors[i] - anchors[0]) / range) * 100 : (i/(nodeEls.length-1))*100;
+      n.style.top = pct + '%';
+    });
+  }
+
+  function update(){
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var segIdx = 0;
+    for(var i=0;i<anchors.length-1;i++){ if(scrollTop >= anchors[i]) segIdx = i; }
+    segIdx = Math.min(segIdx, stops.length - 2);
+    var segStart = anchors[segIdx], segEnd = anchors[segIdx+1];
+    var frac = segEnd > segStart ? (scrollTop - segStart) / (segEnd - segStart) : 0;
+    frac = Math.max(0, Math.min(1, frac));
+
+    var s0 = stops[segIdx], s1 = stops[segIdx+1];
+    var bg = [0,1,2].map(function(k){ return Math.round(lerp(s0.bg[k], s1.bg[k], frac)); });
+    var ink = [0,1,2].map(function(k){ return Math.round(lerp(s0.ink[k], s1.ink[k], frac)); });
+    var accent = [0,1,2].map(function(k){ return Math.round(lerp(s0.accent[k], s1.accent[k], frac)); });
+    var alpha = lerp(s0.alpha, s1.alpha, frac);
+
+    var clamp255 = function(v){ return Math.max(0, Math.min(255, v)); };
+    var bgLight = bg.map(function(c){ return clamp255(c + 12); });
+    var bgDark = bg.map(function(c){ return clamp255(c - 16); });
+
+    root.style.setProperty('--bg-rgb', bg.join(','));
+    root.style.setProperty('--bg-rgb-l', bgLight.join(','));
+    root.style.setProperty('--bg-rgb-d', bgDark.join(','));
+    root.style.setProperty('--ink-rgb', ink.join(','));
+    root.style.setProperty('--accent', accent.join(','));
+    root.style.setProperty('--card-alpha', alpha.toFixed(2));
+
+    var overallProgress = (segIdx + frac) / (stops.length - 1);
+    railFill.style.height = (overallProgress * 100) + '%';
+    railMarker.style.top = (overallProgress * 100) + '%';
+    mobileFill.style.width = (overallProgress * 100) + '%';
+
+    var activeIdx = Math.round(segIdx + frac);
+    nodeEls.forEach(function(n, i){ n.classList.toggle('active', i === activeIdx); });
+  }
+
+  var ticking = false;
+  window.addEventListener('scroll', function(){
+    if(!ticking){ requestAnimationFrame(function(){ update(); ticking = false; }); ticking = true; }
+  }, { passive: true });
+  window.addEventListener('resize', function(){ measure(); update(); });
+
+  window.addEventListener('load', function(){ measure(); update(); });
+  measure(); update();
+
+  var sections = document.querySelectorAll('.stage');
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){ entry.target.classList.add('in-view'); }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach(function(s){ observer.observe(s); });
+
+  var legendToggle = document.getElementById('legendToggle');
+  var legendPanel = document.getElementById('legendPanel');
+  legendToggle.addEventListener('click', function(){ legendPanel.classList.toggle('open'); });
+  document.addEventListener('click', function(e){
+    if(!legendPanel.contains(e.target) && !legendToggle.contains(e.target)){
+      legendPanel.classList.remove('open');
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
